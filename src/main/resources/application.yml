@@ -1,5 +1,16 @@
 
+
+
 spring:
+  profiles:
+    active: dev #profiles 선언하여 적용할 profile을 선택 한다.
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
   devtools:
     livereload:
       enabled: true
@@ -16,11 +27,57 @@ spring:
     username: sa
     password:
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: create-drop
+      format_sql: true
+    show-sql: true
 
 
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    initialization-mode: always
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:tomsstory;MODE=MySQL
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      format_sql: true
+    show-sql: true
+
+
+server:
+  port: 443 #SSL 사용할 포트 지정
+  ssl:
+    enabled: true
+    key-store: my-keystore.jks #"sslcert.co.kr.jks" 또는 "sslcert.co.kr.pfx" 지정
+    key-store-type: JKS
+    key-store-password: spspclzls2@  # jks 또는 pfx 암호
 
 
 

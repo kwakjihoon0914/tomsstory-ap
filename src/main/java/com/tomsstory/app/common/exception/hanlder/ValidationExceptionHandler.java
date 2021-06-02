@@ -18,12 +18,12 @@ public class ValidationExceptionHandler {
 
     @ExceptionHandler(com.tomsstory.app.common.exception.custom.ValidationException.class)
     protected ResponseEntity<ErrorResponse> handleCustomValidationException(com.tomsstory.app.common.exception.custom.ValidationException e, HttpServletRequest req) {
-        ErrorResponse response = ErrorResponse.of(ErrorCode.VALIDATION_ERROR,e);
+        ErrorResponse response = ErrorResponse.of(ErrorCode.VALIDATION_ERROR,req,e);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(javax.xml.bind.ValidationException.class)
     protected ResponseEntity<ErrorResponse> handleValidationException(com.tomsstory.app.common.exception.custom.ValidationException e, HttpServletRequest req) {
-        ErrorResponse response = ErrorResponse.of(ErrorCode.VALIDATION_ERROR,e);
+        ErrorResponse response = ErrorResponse.of(ErrorCode.VALIDATION_ERROR,req,e);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

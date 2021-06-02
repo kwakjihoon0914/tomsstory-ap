@@ -4,8 +4,10 @@ package com.tomsstory.app.blog.domain.content;
 import com.tomsstory.app.blog.domain.comment.Comment;
 import com.tomsstory.app.blog.domain.menu.Menu;
 import com.tomsstory.app.common.domain.BaseEntity;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.List;
 
 @Entity
 @Setter
+@Getter
+@DynamicUpdate
 @ToString
 public class Content extends BaseEntity {
 

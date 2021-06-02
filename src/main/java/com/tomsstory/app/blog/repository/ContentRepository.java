@@ -23,7 +23,7 @@ public interface ContentRepository extends JpaRepository<Content,Long>,ContentCu
             "  FROM Content c " +
             " WHERE LOWER(c.title)    LIKE %:title% " +
             "    OR LOWER(c.subTitle) LIKE %:title% ORDER BY c.title,c.subTitle")
-    List<Content> findByTitleLikeAndSubTitleWithPageRequest(@Param(value="title") String title, Pageable pageable);
+    List<Content> findByTitleLikeAndSubTitleLikeWithPageable(@Param(value="title") String title, Pageable pageable);
 
     @Query(nativeQuery = true,value ="SELECT (SELECT NAME " +
                                      "          FROM MENU" +

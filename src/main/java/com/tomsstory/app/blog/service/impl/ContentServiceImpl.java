@@ -2,10 +2,7 @@ package com.tomsstory.app.blog.service.impl;
 
 import com.tomsstory.app.blog.domain.content.Content;
 import com.tomsstory.app.blog.domain.menu.Menu;
-import com.tomsstory.app.blog.dto.content.ContentCountByMenuDto;
-import com.tomsstory.app.blog.dto.content.ContentDto;
-import com.tomsstory.app.blog.dto.content.CreatedContentDto;
-import com.tomsstory.app.blog.dto.content.PartialContentDto;
+import com.tomsstory.app.blog.dto.content.*;
 import com.tomsstory.app.blog.dto.menu.MenuDto;
 import com.tomsstory.app.blog.repository.CommentRepository;
 import com.tomsstory.app.blog.repository.ContentRepository;
@@ -18,8 +15,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,6 @@ public class ContentServiceImpl implements ContentService {
     final private ContentRepository contentRepository;
     final private CommentRepository commentRepository;
     final private MenuRepository menuRepository;
-
 
 
     @Override
@@ -57,23 +55,23 @@ public class ContentServiceImpl implements ContentService {
 
 
     @Override
-    public List<PartialContentDto.Blog> getContentByTitleWithPageForBlog(Integer page, Integer size, String title) {
+    public List<PartialContentDto.Blog> getContentByTitleLikeAndSubTitleLikeForBlog(Integer page, Integer size, String title) {
         Validator.isNull.test(page,"Page should be not null");
         Validator.isNull.test(size,"Size should be not null");
         Validator.isNull.test(title,"Title should be not null");
 
         title = title.toLowerCase();
 
-        return contentRepository.findByTitleLikeAndSubTitleWithPageRequest(title,PageRequest.of(page,size))
+        return contentRepository.findByTitleLikeAndSubTitleLikeWithPageable(title,PageRequest.of(page,size))
                 .stream().map(PartialContentDto.Blog::of)
                 .collect(Collectors.toList());
     }
 
     @Override
     public ContentDto getContentOne(Long id){
-
         return ContentDto.of(contentRepository.findById(id).get());
     }
+
 
     @Override
     public List<ContentDto> getContentsByMenuId(Long menuId){
@@ -84,6 +82,10 @@ public class ContentServiceImpl implements ContentService {
                 .collect(Collectors.toList());
 
     }
+    @Override
+    public List<ContentCountByMenuDto> getContentCountByMenu() {
+        return contentRepository.findCountByMenu().stream().map(ContentCountByMenuDto::of).collect(Collectors.toList());
+    }
 
     @Override
     public ContentDto getLastOneContentByMenuId(Long menuId){
@@ -93,19 +95,24 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public ContentDto createContent(CreatedContentDto createdContentDto) {
-
-        Content created = contentRepository.save(CreatedContentDto.toEntity(createdContentDto));
+        if (!menuRepository.existsById(createdContentDto.getMenu().getId())) throw new NoSuchElementException("Menu Not Found");
+        Content created = contentRepository.save(createdContentDto.toEntity());
         return ContentDto.of(created);
     }
 
     @Override
-    public List<ContentCountByMenuDto> getContentCountByMenu() {
-        return contentRepository.findCountByMenu().stream().map(ContentCountByMenuDto::of).collect(Collectors.toList());
+    public ContentDto updateContent(UpdatedContent updatedContent) {
+        if (!contentRepository.existsById(updatedContent.getId())) throw new NoSuchElementException("Content Not Found");
+
+        Content updated = contentRepository.save(updatedContent.toEntity());
+        return ContentDto.of(contentRepository.findById(updated.getId()).get());
     }
 
     @Override
-    public List<MenuDto> getAllMenus(){
-        return menuRepository.findAll().stream().map(MenuDto::of).collect(Collectors.toList());
+    public Long deleteContent(Long id) {
+        contentRepository.deleteById(id);
+        return id;
     }
+
 
 }

@@ -20,8 +20,7 @@ public class ElementExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     protected ResponseEntity<ErrorResponse> handleNoSuchValuePresent(NoSuchElementException e, HttpServletRequest req) {
 
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.ENTITY_NOT_FOUND);
-
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.ENTITY_NOT_FOUND,req,e);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

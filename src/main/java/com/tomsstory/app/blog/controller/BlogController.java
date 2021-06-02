@@ -7,6 +7,7 @@ import com.tomsstory.app.blog.dto.content.ContentListWithPageDto;
 import com.tomsstory.app.blog.dto.content.PartialContentDto;
 import com.tomsstory.app.blog.dto.menu.MenuDto;
 import com.tomsstory.app.blog.service.ContentService;
+import com.tomsstory.app.blog.service.MenuService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import java.util.List;
 public class BlogController {
 
     final private ContentService contentService;
+    final private MenuService menuService;
 
     @GetMapping("/blog/contents")
     public ContentListWithPageDto getContentsByPage(@RequestParam(required = false) String title,
@@ -33,7 +35,7 @@ public class BlogController {
 
         List<PartialContentDto.Blog> contents;
         if (title!=null && !title.trim().equals("")){
-            contents = contentService.getContentByTitleWithPageForBlog(page,size,title);
+            contents = contentService.getContentByTitleLikeAndSubTitleLikeForBlog(page,size,title);
         }else{
             contents = contentService.getContentWithPageForBlog(page,size);
         }
@@ -57,12 +59,18 @@ public class BlogController {
 
     @GetMapping("/blog/menus")
     public List<MenuDto> getAllMenu(){
-        return contentService.getAllMenus();
+        return menuService.getAllMenus();
     }
 
 
     @GetMapping("/blog/contents/menus/count")
     public List<ContentCountByMenuDto> getContentCntByMenu(){
         return contentService.getContentCountByMenu();
+    }
+
+
+    @GetMapping("/blog/contents/hot")
+    public ContentDto getHotContent(){
+        return contentService.getContentOne(18L);
     }
 }
