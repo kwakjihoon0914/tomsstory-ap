@@ -20,6 +20,7 @@ public class ContentDto {
     private String text;
     private String type;
     private String thumbnail;
+    private Long viewCnt;
     private String createdBy;
     private LocalDateTime createdAt;
     private String lastModifiedBy;

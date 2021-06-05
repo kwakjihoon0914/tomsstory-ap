@@ -15,6 +15,7 @@ public class PartialContentDto {
         private String title;
         private String subTitle;
         private String thumbnail;
+        private Long viewCnt;
         private String lastModifiedBy;
         private LocalDateTime lastModifiedAt;
         private MenuDto menu;

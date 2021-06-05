@@ -8,6 +8,7 @@ import com.tomsstory.app.blog.repository.CommentRepository;
 import com.tomsstory.app.blog.repository.ContentRepository;
 import com.tomsstory.app.blog.repository.MenuRepository;
 import com.tomsstory.app.blog.service.ContentService;
+import com.tomsstory.app.common.validation.Checker;
 import com.tomsstory.app.common.validation.Validator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,7 @@ public class ContentServiceImpl implements ContentService {
         Validator.isNull.test(size,"Size should be not null");
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return contentRepository.findAll(pageRequest)
+        return contentRepository.findAllContents(pageRequest)
                 .stream().map(ContentDto::of).collect(Collectors.toList());
     }
 
@@ -48,7 +49,7 @@ public class ContentServiceImpl implements ContentService {
         Validator.isNull.test(size,"Size should be not null");
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return contentRepository.findAll(pageRequest)
+        return contentRepository.findAllContents(pageRequest)
                 .stream().map(PartialContentDto.Blog::of).collect(Collectors.toList());
     }
 
@@ -69,7 +70,18 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public ContentDto getContentOne(Long id){
-        return ContentDto.of(contentRepository.findById(id).get());
+
+        Content content = contentRepository.findById(id).get(); //findTop1ByOrderByViewCntDesc();//
+        content.addViewCnt();
+        contentRepository.save(content);
+
+        return ContentDto.of(content);
+    }
+
+    @Override
+    public ContentDto getContentHotOne(){
+        Content content = contentRepository.findTop1ByOrderByViewCntDesc();
+        return ContentDto.of(content);
     }
 
 

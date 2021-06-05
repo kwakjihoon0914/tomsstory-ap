@@ -27,6 +27,7 @@ public class BlogCudController {
 
     @DeleteMapping("/blog/contents")
     public Long deleteContent(@RequestParam Long contentId){
+        if (true) throw new RuntimeException("error");
         return contentService.deleteContent(contentId);
     }
 

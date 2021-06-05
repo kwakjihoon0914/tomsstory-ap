@@ -14,6 +14,13 @@ import java.util.Optional;
 
 public interface ContentRepository extends JpaRepository<Content,Long>,ContentCustomRepository {
 
+
+    @Query(value = "SELECT c " +
+            "         FROM Content c " +
+            "         LEFT JOIN FETCH c.menu")
+    List<Content> findAllContents(Pageable pageable);
+
+
     List<Content> findByMenuEqualsOrderByCreatedAtDesc(Menu menu);
     Optional<Content> findFirstByMenuEqualsOrderByCreatedAtDesc(Menu menu);
 
@@ -35,5 +42,8 @@ public interface ContentRepository extends JpaRepository<Content,Long>,ContentCu
                                      "         INNER JOIN MENU M ON C.MENU_ID = M.ID" +
                                      "         GROUP BY P_ID) G")
     List<ContentCountByMenu> findCountByMenu();
+
+
+    Content findTop1ByOrderByViewCntDesc();
 
 }

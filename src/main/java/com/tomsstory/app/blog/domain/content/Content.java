@@ -25,10 +25,13 @@ public class Content extends BaseEntity {
     private Long id;
     private String title;
     private String subTitle;
-
+    @Column(columnDefinition = "LONGTEXT")
     private String text;
     private String type;
     private String thumbnail;
+
+
+    private Long viewCnt = 0L;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Menu menu;
@@ -36,5 +39,7 @@ public class Content extends BaseEntity {
     @OneToMany(mappedBy = "content" ,fetch = FetchType.LAZY)
     List<Comment> comments = new ArrayList<>();
 
-
+    public void addViewCnt(){
+        this.viewCnt++;
+    }
 }

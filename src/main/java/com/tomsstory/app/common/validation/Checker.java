@@ -8,15 +8,15 @@ import java.util.function.Predicate;
 
 public class Checker<T> {
     private Predicate<T> condition;
-    private String defaultSuffixMessage;
-
+    static String defaultSuffixMessage = "Validation Error";
+    private String customizeSuffixMessage;
     public Checker(Predicate<T> condition) {
         this.condition = condition;
-        this.defaultSuffixMessage = "Validation Error";
     }
 
-    public Checker(Predicate<T> condition,String  defaultSuffixMessage) {
+    public Checker(Predicate<T> condition,String  customizeSuffixMessage) {
         this.condition = condition;
+        this.customizeSuffixMessage = customizeSuffixMessage;
     }
 
     public void test(T t){
@@ -26,6 +26,13 @@ public class Checker<T> {
         if (condition.test(t)) throw ex;
     }
     public void test(T t,String message){
-        if (condition.test(t)) throw new ValidationException (message+" ::"+this.defaultSuffixMessage);
+        if (condition.test(t)) throw new ValidationException (message+" ::"+this.customizeSuffixMessage);
+    }
+
+    public static void throwValidationException(String message){
+        throw new ValidationException(message);
+    }
+    public static void throwValidationException(){
+        throw new ValidationException(defaultSuffixMessage);
     }
 }

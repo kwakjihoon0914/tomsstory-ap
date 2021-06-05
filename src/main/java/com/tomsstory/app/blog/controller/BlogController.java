@@ -8,6 +8,8 @@ import com.tomsstory.app.blog.dto.content.PartialContentDto;
 import com.tomsstory.app.blog.dto.menu.MenuDto;
 import com.tomsstory.app.blog.service.ContentService;
 import com.tomsstory.app.blog.service.MenuService;
+import com.tomsstory.app.common.validation.Checker;
+import com.tomsstory.app.common.validation.Validator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +31,8 @@ public class BlogController {
     public ContentListWithPageDto getContentsByPage(@RequestParam(required = false) String title,
                                                     @RequestParam(required = false) Integer page,
                                                     @RequestParam(required = false) Integer size){
-
-        if (size == null || size > 30) size = 5;
+        if (size > 30)Checker.throwValidationException("contents size 는 30을 넘길 수 없습니다.");
+        if (size == null) size = 5;
         if (page == null) page = 0;
 
         List<PartialContentDto.Blog> contents;
@@ -68,9 +70,8 @@ public class BlogController {
         return contentService.getContentCountByMenu();
     }
 
-
     @GetMapping("/blog/contents/hot")
     public ContentDto getHotContent(){
-        return contentService.getContentOne(18L);
+        return contentService.getContentHotOne();
     }
 }

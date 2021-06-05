@@ -16,21 +16,19 @@ spring:
       enabled: true
     restart:
       enabled: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   datasource:
-    initialization-mode: always
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:tomsstory;MODE=MySQL
-    username: sa
-    password:
+    initialization-mode: never
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tomsstory?serverTimezone=UTC&characterEncoding=UTF-8
+    username: tom
+    password: spspclzls2@
   jpa:
     hibernate:
-      ddl-auto: create-drop
-      format_sql: true
-    show-sql: true
+      #ddl-auto: create
+      show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
 
 logging:
@@ -54,21 +52,15 @@ spring:
       enabled: true
     restart:
       enabled: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   datasource:
-    initialization-mode: always
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:tomsstory;MODE=MySQL
-    username: sa
-    password:
+    initialization-mode: never
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tomsstory?serverTimezone=UTC&characterEncoding=UTF-8
+    username: tom
+    password: spspclzls2@
   jpa:
     hibernate:
-      ddl-auto: create-drop
-      format_sql: true
-    show-sql: true
+      #ddl-auto: create-drop
 
 
 server:

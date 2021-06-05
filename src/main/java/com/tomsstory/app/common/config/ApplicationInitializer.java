@@ -26,6 +26,29 @@ public class ApplicationInitializer {
     final private CommentRepository commentRepository;
     private List<Menu> createdMenus;
 
+    private void initContents(){
+        List<Menu> createdMenus = createDefaultMenu();
+        List<Content> contents = new ArrayList<>();
+
+        createdMenus.stream().filter(Menu::isMenu).forEach(menu->{
+            Content content = new Content();
+
+            String title = "Title - "+ menu.getName();
+            String subTitle = "Sub Title -" + menu.getName();
+            String text = "## 1."+title +" "+ subTitle + " "+menu.getId();
+
+            content.setThumbnail(menu.getName());
+            content.setTitle(title);
+            content.setSubTitle(subTitle);
+            content.setText(text);
+            content.setType("md");
+            content.setMenu(menu);
+            contents.add(content);
+
+        });
+        contentRepository.saveAll(contents);
+    }
+
     private List<Menu> createDefaultMenu(){
         List<Menu> createdMenus = new ArrayList<>();
         String [] parentMenus = {"Java","Javascript","DB","Server"};
@@ -57,31 +80,7 @@ public class ApplicationInitializer {
     @PostConstruct
     @Transactional
     public void init() {
-
-        List<Menu> createdMenus = createDefaultMenu();
-        List<Content> contents = new ArrayList<>();
-
-        createdMenus.stream().filter(Menu::isMenu).forEach(menu->{
-            Content content = new Content();
-
-            String title = "Title - "+ menu.getName();
-            String subTitle = "Sub Title -" + menu.getName();
-            String text = "## 1."+title +" "+ subTitle + " "+menu.getId();
-
-            content.setThumbnail(menu.getName());
-            content.setTitle(title);
-            content.setSubTitle(subTitle);
-            content.setText(text);
-            content.setType("md");
-            content.setMenu(menu);
-            contents.add(content);
-
-        });
-        contentRepository.saveAll(contents);
-
-
-
-
+        //initContents();
     }
 
 }

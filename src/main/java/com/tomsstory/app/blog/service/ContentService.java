@@ -18,6 +18,7 @@ public interface ContentService {
 
     List<ContentDto> getContentsByMenuId(Long menuId);
     ContentDto getLastOneContentByMenuId(Long menuId);
+    ContentDto getContentHotOne();
 
     List<ContentCountByMenuDto> getContentCountByMenu();
 
