@@ -31,7 +31,6 @@ public class BlogController {
     public ContentListWithPageDto getContentsByPage(@RequestParam(required = false) String title,
                                                     @RequestParam(required = false) Integer page,
                                                     @RequestParam(required = false) Integer size){
-        if (size > 30)Checker.throwValidationException("contents size 는 30을 넘길 수 없습니다.");
         if (size == null) size = 5;
         if (page == null) page = 0;
 

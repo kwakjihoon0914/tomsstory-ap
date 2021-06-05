@@ -8,6 +8,7 @@ import com.tomsstory.app.blog.repository.ContentRepository;
 import com.tomsstory.app.blog.repository.MenuRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 @Slf4j
 @AllArgsConstructor
-public class ApplicationInitializer {
+@Profile("dev")
+public class ApplicationInitializerDev {
 
     final private MenuRepository menuRepository;
     final private ContentRepository contentRepository;
@@ -76,11 +78,12 @@ public class ApplicationInitializer {
     }
 
 
-
     @PostConstruct
     @Transactional
-    public void init() {
-        //initContents();
+    public void initAll() {
+        log.info("##### init all");
+        initContents();
     }
+
 
 }
